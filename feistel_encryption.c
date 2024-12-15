@@ -33,7 +33,7 @@ uint32_t feistel_function(uint32_t block, uint32_t subkey) {
     // printf("\tblock = %08X\n", block);
     // printf("\tblock << 3 = %08X\n", (block << 3));
     // printf("\tblock >> 29 = %08X\n", (block >> 29));
-    printf("\t((block << 3) | (block >> 29)) = %08X\n", ((block << 3) | (block >> 29)));
+    // printf("\t((block << 3) | (block >> 29)) = %08X\n", ((block << 3) | (block >> 29)));
     // printf("\tblock ^ subkey = %08X\n", block ^ subkey);
     // printf("\tres = %08X\n", (block ^ subkey) + ((block << 3) | (block >> 29)));
     
@@ -59,11 +59,11 @@ void feistel_decrypt_block(uint32_t *left, uint32_t *right, uint64_t key) {
     // printf("Begin: left = %08X, right = %08X\n", *left, *right);
     for (int round = 7; round >= 0; round--) {
         uint32_t subkey = key ^ (round * SUBKEY);
-        printf("In round %d: subkey : %08X\n", round, subkey);
+        // printf("In round %d: subkey : %08X\n", round, subkey);
         uint32_t temp = *left;
         *left = *right ^ feistel_function(*left, subkey);
         *right = temp;
-        printf("After round %d: left = %08X, right = %08X\n", round, *left, *right);
+        // printf("After round %d: left = %08X, right = %08X\n", round, *left, *right);
     }
 }
 
@@ -88,22 +88,22 @@ void feistel_encrypt_message(uint8_t *message, size_t len, uint64_t key) {
     for (size_t i = 0; i < len; i += BLOCK_SIZE) {
         uint32_t *left = (uint32_t *)&message[i];
         uint32_t *right = (uint32_t *)&message[i + 4];
-        for (size_t j = 0; j < BLOCK_SIZE; j += 1) {
-            printf("%02x", message[i+j]);
-        }
-        printf(" -> ");
+        // for (size_t j = 0; j < BLOCK_SIZE; j += 1) {
+        //     printf("%02x", message[i+j]);
+        // }
+        // printf(" -> ");
         // printf("%ld : Message déchiffré : %08hhn\n", i, &message[i]);
         feistel_encrypt_block(left, right, key);
-        for (size_t j = 0; j < BLOCK_SIZE; j += 1) {
-            printf("%02x", message[i+j]);
-        }
-        printf("\n");
+        // for (size_t j = 0; j < BLOCK_SIZE; j += 1) {
+        //     printf("%02x", message[i+j]);
+        // }
+        // printf("\n");
     }
 }
 
 // Déchiffrement d'un message complet
 void feistel_decrypt_message(uint8_t *message, size_t len, uint64_t key) {
-    printf("Decrypt : \n");
+    // printf("Decrypt : \n");
     for (size_t i = 0; i < len; i += BLOCK_SIZE) {
         uint32_t *left = (uint32_t *)&message[i];
         uint32_t *right = (uint32_t *)&message[i + 4];
